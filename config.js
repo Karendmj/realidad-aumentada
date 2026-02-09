@@ -14,9 +14,9 @@
         
         // Avatar 3D
         avatar: {
-            url: "https://models.readyplayer.me/63a6c8efc3e1a6f0f12e4f31.glb?morphTargets=Armature_Blink_Left,Armature_Blink_Right",
-            escala: "1 1 1",
-            posicion: "0 -1 0",
+            url: "moggle-final-fantasy/source/moggle.glb",
+            escala: "0.5 0.5 0.5",
+            posicion: "0 0 0",
             rotacion: "0 360 0",
             duracionRotacion: 8000 // en milisegundos
         },

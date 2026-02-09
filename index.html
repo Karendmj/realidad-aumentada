@@ -179,8 +179,8 @@
     <a-scene id="arScene" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
         <a-assets>
-            <!-- Avatar 3D gltf (usando modelo público de Mixamo) -->
-            <a-asset-item id="avatar-model" src="https://models.readyplayer.me/63a6c8efc3e1a6f0f12e4f31.glb?morphTargets=Armature_Blink_Left,Armature_Blink_Right"></a-asset-item>
+            <!-- Avatar 3D gltf (Moggle - Final Fantasy) -->
+            <a-asset-item id="avatar-model" src="moggle-final-fantasy/source/moggle.glb"></a-asset-item>
             
             <!-- Modelo alternativo más simple -->
             <img id="textura-caja" src="https://i.imgur.com/mYmmbrp.jpg">
@@ -193,66 +193,66 @@
             <!-- Avatar 3D principal -->
             <a-entity id="avatar" 
                       gltf-model="#avatar-model"
-                      position="0 -1 0"
-                      scale="1 1 1"
+                      position="0 0 0"
+                      scale="0.5 0.5 0.5"
                       animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
             </a-entity>
 
             <!-- Esfera flotante decorativa -->
-            <a-sphere position="0 2 -1"
-                      radius="0.3"
+            <a-sphere position="0 3 0"
+                      radius="0.6"
                       material="color: #00D4FF; emissive: #00D4FF; metalness: 0.8; roughness: 0.2;"
-                      animation="property: position; to: 0 2.5 -1; loop: true; dir: alternate; dur: 2000">
+                      animation="property: position; to: 0 3.5 0; loop: true; dir: alternate; dur: 2000">
             </a-sphere>
 
             <!-- Caja con textura que rota -->
-            <a-box position="-0.8 1.2 0"
-                   scale="0.4 0.4 0.4"
+            <a-box position="-2 2 0"
+                   scale="1 1 1"
                    material="src: #textura-caja; opacity: 0.9;"
                    animation="property: rotation; to: 360 360 0; loop: true; dur: 4000">
             </a-box>
 
             <!-- Caja adicional -->
-            <a-box position="0.8 1.2 0"
-                   scale="0.4 0.4 0.4"
+            <a-box position="2 2 0"
+                   scale="1 1 1"
                    material="color: #FF00FF; metalness: 0.7;"
                    animation="property: rotation; to: 0 360 360; loop: true; dur: 5000">
             </a-box>
 
             <!-- Texto principal animado -->
             <a-text value="¡BIENVENIDO!"
-                    position="0 2.8 0"
+                    position="0 4.5 0"
                     align="center"
                     color="#00D4FF"
-                    scale="1.5 1.5 1.5"
-                    animation="property: scale; to: 1.8 1.8 1.8; loop: true; dir: alternate; dur: 1500">
+                    scale="3 3 3"
+                    animation="property: scale; to: 3.5 3.5 3.5; loop: true; dir: alternate; dur: 1500">
             </a-text>
 
             <!-- Nombre del creador -->
             <a-text id="nameText"
                     value="Karen Mejia"
-                    position="0 -2 0"
+                    position="0 -0.5 0"
                     align="center"
                     color="#FFFFFF"
-                    scale="0.8 0.8 0.8">
+                    scale="2 2 2">
             </a-text>
 
             <!-- Profesión -->
             <a-text id="professionText"
                     value="Estudiante de diseño industrial"
-                    position="0 -2.5 0"
+                    position="0 -1.5 0"
                     align="center"
                     color="#FFD700"
-                    scale="0.6 0.6 0.6">
+                    scale="1.5 1.5 1.5">
             </a-text>
 
             <!-- Partículas (esferas pequeñas) -->
-            <a-sphere position="-1.5 1 0" radius="0.1" material="color: #FF6B9D; emissive: #FF6B9D;"
-                      animation="property: position; to: -1.5 1.8 0; loop: true; dir: alternate; dur: 2000"></a-sphere>
-            <a-sphere position="1.5 1 0" radius="0.1" material="color: #C44569; emissive: #C44569;"
-                      animation="property: position; to: 1.5 1.8 0; loop: true; dir: alternate; dur: 2500"></a-sphere>
-            <a-sphere position="0 1 1.2" radius="0.1" material="color: #00D4FF; emissive: #00D4FF;"
-                      animation="property: position; to: 0 1.8 1.2; loop: true; dir: alternate; dur: 3000"></a-sphere>
+            <a-sphere position="-3 2 0" radius="0.2" material="color: #FF6B9D; emissive: #FF6B9D;"
+                      animation="property: position; to: -3 2.8 0; loop: true; dir: alternate; dur: 2000"></a-sphere>
+            <a-sphere position="3 2 0" radius="0.2" material="color: #C44569; emissive: #C44569;"
+                      animation="property: position; to: 3 2.8 0; loop: true; dir: alternate; dur: 2500"></a-sphere>
+            <a-sphere position="0 2 2" radius="0.2" material="color: #00D4FF; emissive: #00D4FF;"
+                      animation="property: position; to: 0 2.8 2; loop: true; dir: alternate; dur: 3000"></a-sphere>
 
         </a-marker>
 
