@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta de Presentación Infinita - AR</title>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #arScene {
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* Botones flotantes */
+        .social-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .social-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .linkedin {
+            background: linear-gradient(135deg, #0077B5, #005885);
+        }
+
+        .github {
+            background: linear-gradient(135deg, #333, #000);
+        }
+
+        .instagram {
+            background: linear-gradient(135deg, #E4405F, #833AB4);
+        }
+
+        .youtube {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+        }
+
+        .email {
+            background: linear-gradient(135deg, #EA4335, #C5221F);
+        }
+
+        .whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+        }
+
+        /* Modal de video */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            background: black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .close-video {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .close-video:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Info panel */
+        .info-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 300px;
+            z-index: 100;
+        }
+
+        .info-panel h2 {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .video-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            border: none;
+        }
+
+        .video-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Panel de información -->
+    <div class="info-panel">
+        <h2>📱 Tarjeta AR</h2>
+        <p>Apunta tu cámara al marcador <strong>Hiro</strong></p>
+        <button class="video-btn" onclick="openVideoModal()">▶️ Ver presentación</button>
+    </div>
+
+    <!-- Escena AR -->
+    <a-scene id="arScene" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+
+        <a-assets>
+            <!-- Avatar 3D gltf (usando modelo público de Mixamo) -->
+            <a-asset-item id="avatar-model" src="https://models.readyplayer.me/63a6c8efc3e1a6f0f12e4f31.glb?morphTargets=Armature_Blink_Left,Armature_Blink_Right"></a-asset-item>
+            
+            <!-- Modelo alternativo más simple -->
+            <img id="textura-caja" src="https://i.imgur.com/mYmmbrp.jpg">
+            <img id="textura-esfera" src="https://i.imgur.com/QYzF2fh.jpg">
+        </a-assets>
+
+        <!-- Marcador Hiro -->
+        <a-marker preset="hiro" id="marker">
+
+            <!-- Avatar 3D principal -->
+            <a-entity id="avatar" 
+                      gltf-model="#avatar-model"
+                      position="0 -1 0"
+                      scale="1 1 1"
+                      animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+            </a-entity>
+
+            <!-- Esfera flotante decorativa -->
+            <a-sphere position="0 2 -1"
+                      radius="0.3"
+                      material="color: #00D4FF; emissive: #00D4FF; metalness: 0.8; roughness: 0.2;"
+                      animation="property: position; to: 0 2.5 -1; loop: true; dir: alternate; dur: 2000">
+            </a-sphere>
+
+            <!-- Caja con textura que rota -->
+            <a-box position="-0.8 1.2 0"
+                   scale="0.4 0.4 0.4"
+                   material="src: #textura-caja; opacity: 0.9;"
+                   animation="property: rotation; to: 360 360 0; loop: true; dur: 4000">
+            </a-box>
+
+            <!-- Caja adicional -->
+            <a-box position="0.8 1.2 0"
+                   scale="0.4 0.4 0.4"
+                   material="color: #FF00FF; metalness: 0.7;"
+                   animation="property: rotation; to: 0 360 360; loop: true; dur: 5000">
+            </a-box>
+
+            <!-- Texto principal animado -->
+            <a-text value="¡BIENVENIDO!"
+                    position="0 2.8 0"
+                    align="center"
+                    color="#00D4FF"
+                    scale="1.5 1.5 1.5"
+                    animation="property: scale; to: 1.8 1.8 1.8; loop: true; dir: alternate; dur: 1500">
+            </a-text>
+
+            <!-- Nombre del creador -->
+            <a-text id="nameText"
+                    value="Karen Mejia"
+                    position="0 -2 0"
+                    align="center"
+                    color="#FFFFFF"
+                    scale="0.8 0.8 0.8">
+            </a-text>
+
+            <!-- Profesión -->
+            <a-text id="professionText"
+                    value="Estudiante de diseño industrial"
+                    position="0 -2.5 0"
+                    align="center"
+                    color="#FFD700"
+                    scale="0.6 0.6 0.6">
+            </a-text>
+
+            <!-- Partículas (esferas pequeñas) -->
+            <a-sphere position="-1.5 1 0" radius="0.1" material="color: #FF6B9D; emissive: #FF6B9D;"
+                      animation="property: position; to: -1.5 1.8 0; loop: true; dir: alternate; dur: 2000"></a-sphere>
+            <a-sphere position="1.5 1 0" radius="0.1" material="color: #C44569; emissive: #C44569;"
+                      animation="property: position; to: 1.5 1.8 0; loop: true; dir: alternate; dur: 2500"></a-sphere>
+            <a-sphere position="0 1 1.2" radius="0.1" material="color: #00D4FF; emissive: #00D4FF;"
+                      animation="property: position; to: 0 1.8 1.2; loop: true; dir: alternate; dur: 3000"></a-sphere>
+
+        </a-marker>
+
+        <!-- Cámara -->
+        <a-entity camera></a-entity>
+
+    </a-scene>
+
+    <!-- Botones de redes sociales -->
+    <div class="social-buttons">
+        <a href="https://linkedin.com/in/tunombre" target="_blank" class="social-btn linkedin" title="LinkedIn">in</a>
+        <a href="https://github.com/tunombre" target="_blank" class="social-btn github" title="GitHub">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+        </a>
+        <a href="https://instagram.com/tunombre" target="_blank" class="social-btn instagram" title="Instagram">📷</a>
+        <a href="https://youtube.com/@tunombre" target="_blank" class="social-btn youtube" title="YouTube">▶</a>
+        <a href="mailto:tuemail@example.com" class="social-btn email" title="Email">✉</a>
+        <a href="https://wa.me/1234567890" target="_blank" class="social-btn whatsapp" title="WhatsApp">💬</a>
+    </div>
+
+    <!-- Modal de video -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-container">
+            <button class="close-video" onclick="closeVideoModal()">✕</button>
+            <video id="presentationVideo" controls>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Tu navegador no soporta video HTML5.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar textos con datos de config
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('nameText').setAttribute('value', CONFIG.nombre);
+            document.getElementById('professionText').setAttribute('value', CONFIG.profesion);
+        });
+
+        // Función para abrir modal de video
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('presentationVideo');
+            modal.classList.add('active');
+            video.play();
+        }
+
+        // Función para cerrar modal de video
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('presentationVideo');
+            modal.classList.remove('active');
+            video.pause();
+            video.currentTime = 0;
+        }
+
+        // Cerrar modal al hacer clic fuera del video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+
+        // Detectar si el marcador es encontrado
+        const marker = document.getElementById('marker');
+        marker.addEventListener('markerFound', function() {
+            console.log('¡Marcador Hiro detectado!');
+        });
+
+        marker.addEventListener('markerLost', function() {
+            console.log('Marcador perdido');
+        });
+
+        // Log inicial
+        console.log('🎉 Tarjeta de Presentación AR cargada correctamente');
+        console.log('📱 Asegúrate de tener HTTPS activado');
+    </script>
+</body>
+</html>
