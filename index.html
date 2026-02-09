@@ -233,9 +233,10 @@
             <!-- Avatar 3D principal -->
             <a-entity id="avatar" 
                       gltf-model="#avatar-model"
-                      position="0 0 0"
+                      position="0.3 0 0.2"
+                      rotation="0 45 0"
                       scale="0.5 0.5 0.5"
-                      animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+                      animation="property: rotation; to: 0 405 0; loop: true; dur: 8000">
             </a-entity>
 
             <!-- Esfera flotante decorativa -->
@@ -327,14 +328,31 @@
     </div>
 
     <script>
-        // Función para cambiar color del cubo
+        // Función para cambiar color de múltiples elementos
         function changeCubeColor(color) {
+            // Cambiar cubo (primer cubo con textura)
             const cubes = document.querySelectorAll('a-box');
-            cubes.forEach((cube, index) => {
-                if (index === 0) { // Primer cubo
-                    cube.setAttribute('material', `color: ${color}; metalness: 0.7;`);
-                }
-            });
+            if (cubes[0]) {
+                cubes[0].setAttribute('material', `color: ${color}; metalness: 0.7;`);
+            }
+
+            // Cambiar esfera flotante
+            const spheres = document.querySelectorAll('a-sphere');
+            if (spheres[0]) {
+                spheres[0].setAttribute('material', `color: ${color}; emissive: ${color}; metalness: 0.8; roughness: 0.2;`);
+            }
+
+            // Cambiar texto principal
+            const textElements = document.querySelectorAll('a-text');
+            if (textElements[0]) {
+                textElements[0].setAttribute('color', color);
+            }
+
+            // Cambiar partículas (esferas pequeñas)
+            const particles = document.querySelectorAll('a-sphere');
+            for (let i = 2; i < particles.length; i++) {
+                particles[i].setAttribute('material', `color: ${color}; emissive: ${color};`);
+            }
         }
 
         // Actualizar textos con datos de config
