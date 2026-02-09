@@ -164,6 +164,37 @@
         .video-btn:hover {
             opacity: 0.8;
         }
+
+        /* Botones de color */
+        .color-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+            flex-direction: column;
+        }
+
+        .color-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .color-btn-red { background: #FF0000; }
+        .color-btn-blue { background: #00D4FF; }
+        .color-btn-green { background: #00FF00; }
+        .color-btn-purple { background: #FF00FF; }
+        .color-btn-yellow { background: #FFD700; }
     </style>
 </head>
 
@@ -173,6 +204,15 @@
         <h2>📱 Tarjeta AR</h2>
         <p>Apunta tu cámara al marcador <strong>Hiro</strong></p>
         <button class="video-btn" onclick="openVideoModal()">▶️ Ver presentación</button>
+    </div>
+
+    <!-- Botones de color para cambiar cubo -->
+    <div class="color-buttons">
+        <button class="color-btn color-btn-red" onclick="changeCubeColor('#FF0000')" title="Rojo"></button>
+        <button class="color-btn color-btn-blue" onclick="changeCubeColor('#00D4FF')" title="Azul"></button>
+        <button class="color-btn color-btn-green" onclick="changeCubeColor('#00FF00')" title="Verde"></button>
+        <button class="color-btn color-btn-purple" onclick="changeCubeColor('#FF00FF')" title="Púrpura"></button>
+        <button class="color-btn color-btn-yellow" onclick="changeCubeColor('#FFD700')" title="Amarillo"></button>
     </div>
 
     <!-- Escena AR -->
@@ -199,60 +239,60 @@
             </a-entity>
 
             <!-- Esfera flotante decorativa -->
-            <a-sphere position="0 3 0"
-                      radius="0.6"
+            <a-sphere position="0 1.5 0"
+                      radius="0.3"
                       material="color: #00D4FF; emissive: #00D4FF; metalness: 0.8; roughness: 0.2;"
-                      animation="property: position; to: 0 3.5 0; loop: true; dir: alternate; dur: 2000">
+                      animation="property: position; to: 0 1.8 0; loop: true; dir: alternate; dur: 2000">
             </a-sphere>
 
             <!-- Caja con textura que rota -->
-            <a-box position="-2 2 0"
-                   scale="1 1 1"
+            <a-box position="-1 1 0"
+                   scale="0.5 0.5 0.5"
                    material="src: #textura-caja; opacity: 0.9;"
                    animation="property: rotation; to: 360 360 0; loop: true; dur: 4000">
             </a-box>
 
             <!-- Caja adicional -->
-            <a-box position="2 2 0"
-                   scale="1 1 1"
+            <a-box position="1 1 0"
+                   scale="0.5 0.5 0.5"
                    material="color: #FF00FF; metalness: 0.7;"
                    animation="property: rotation; to: 0 360 360; loop: true; dur: 5000">
             </a-box>
 
             <!-- Texto principal animado -->
             <a-text value="¡BIENVENIDO!"
-                    position="0 4.5 0"
+                    position="0 2.2 0"
                     align="center"
                     color="#00D4FF"
-                    scale="3 3 3"
-                    animation="property: scale; to: 3.5 3.5 3.5; loop: true; dir: alternate; dur: 1500">
+                    scale="1.5 1.5 1.5"
+                    animation="property: scale; to: 1.8 1.8 1.8; loop: true; dir: alternate; dur: 1500">
             </a-text>
 
             <!-- Nombre del creador -->
             <a-text id="nameText"
                     value="Karen Mejia"
-                    position="0 -0.5 0"
+                    position="0 -0.3 0"
                     align="center"
                     color="#FFFFFF"
-                    scale="2 2 2">
+                    scale="1 1 1">
             </a-text>
 
             <!-- Profesión -->
             <a-text id="professionText"
                     value="Estudiante de diseño industrial"
-                    position="0 -1.5 0"
+                    position="0 -0.8 0"
                     align="center"
                     color="#FFD700"
-                    scale="1.5 1.5 1.5">
+                    scale="0.7 0.7 0.7">
             </a-text>
 
             <!-- Partículas (esferas pequeñas) -->
-            <a-sphere position="-3 2 0" radius="0.2" material="color: #FF6B9D; emissive: #FF6B9D;"
-                      animation="property: position; to: -3 2.8 0; loop: true; dir: alternate; dur: 2000"></a-sphere>
-            <a-sphere position="3 2 0" radius="0.2" material="color: #C44569; emissive: #C44569;"
-                      animation="property: position; to: 3 2.8 0; loop: true; dir: alternate; dur: 2500"></a-sphere>
-            <a-sphere position="0 2 2" radius="0.2" material="color: #00D4FF; emissive: #00D4FF;"
-                      animation="property: position; to: 0 2.8 2; loop: true; dir: alternate; dur: 3000"></a-sphere>
+            <a-sphere position="-1.5 1 0" radius="0.1" material="color: #FF6B9D; emissive: #FF6B9D;"
+                      animation="property: position; to: -1.5 1.4 0; loop: true; dir: alternate; dur: 2000"></a-sphere>
+            <a-sphere position="1.5 1 0" radius="0.1" material="color: #C44569; emissive: #C44569;"
+                      animation="property: position; to: 1.5 1.4 0; loop: true; dir: alternate; dur: 2500"></a-sphere>
+            <a-sphere position="0 1 1" radius="0.1" material="color: #00D4FF; emissive: #00D4FF;"
+                      animation="property: position; to: 0 1.4 1; loop: true; dir: alternate; dur: 3000"></a-sphere>
 
         </a-marker>
 
@@ -287,6 +327,16 @@
     </div>
 
     <script>
+        // Función para cambiar color del cubo
+        function changeCubeColor(color) {
+            const cubes = document.querySelectorAll('a-box');
+            cubes.forEach((cube, index) => {
+                if (index === 0) { // Primer cubo
+                    cube.setAttribute('material', `color: ${color}; metalness: 0.7;`);
+                }
+            });
+        }
+
         // Actualizar textos con datos de config
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('nameText').setAttribute('value', CONFIG.nombre);
