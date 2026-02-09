@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Control - Tarjeta AR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.8;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .status-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .status-item.complete {
+            border-left-color: #4CAF50;
+        }
+
+        .status-item.pending {
+            border-left-color: #FF9800;
+        }
+
+        .status-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .status-content {
+            flex-grow: 1;
+        }
+
+        .status-content h3 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .status-content p {
+            color: #999;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .banner {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .banner h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .banner-code {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 28px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            header p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🎉 Centro de Control AR</h1>
+            <p>Tarjeta de Presentación Infinita - Todo lo que necesitas en un lugar</p>
+        </header>
+
+        <!-- Banner principal -->
+        <div class="banner">
+            <h3>✅ Tu proyecto está listo para personalizar y desplegar</h3>
+            <p>Sigue los pasos en la tarjeta de "Inicio Rápido" para empezar</p>
+        </div>
+
+        <!-- Grid principal -->
+        <div class="grid">
+            <!-- Card 1: Inicio Rápido -->
+            <div class="card">
+                <div class="card-icon">🚀</div>
+                <h2>Inicio Rápido</h2>
+                <p>Personaliza tu perfil, sube a internet y prueba en 5 minutos</p>
+                <div class="card-buttons">
+                    <a href="GUIA_RAPIDA.md" class="btn btn-primary">Ver guía</a>
+                </div>
+            </div>
+
+            <!-- Card 2: Ver el Proyecto -->
+            <div class="card">
+                <div class="card-icon">👁️</div>
+                <h2>Ver Proyecto AR</h2>
+                <p>Abre la tarjeta AR completa con el marcador Hiro</p>
+                <div class="card-buttons">
+                    <a href="index.html" class="btn btn-primary">Abrir AR</a>
+                    <a href="marcador.html" class="btn btn-secondary">📍 Marcador</a>
+                </div>
+            </div>
+
+            <!-- Card 3: Personalizar -->
+            <div class="card">
+                <div class="card-icon">🎨</div>
+                <h2>Personalización</h2>
+                <p>Ejemplos avanzados para customizar colores, efectos y más</p>
+                <div class="card-buttons">
+                    <a href="PERSONALIZACION.md" class="btn btn-primary">Leer</a>
+                </div>
+            </div>
+
+            <!-- Card 4: Despliegue -->
+            <div class="card">
+                <div class="card-icon">🌐</div>
+                <h2>Despliegue HTTPS</h2>
+                <p>Instrucciones para publicar en Glitch, GitHub, Netlify o Vercel</p>
+                <div class="card-buttons">
+                    <a href="DESPLIEGUE.md" class="btn btn-primary">Guía</a>
+                </div>
+            </div>
+
+            <!-- Card 5: Solución de problemas -->
+            <div class="card">
+                <div class="card-icon">🆘</div>
+                <h2>Solucionar Errores</h2>
+                <p>Problemas comunes y sus soluciones paso a paso</p>
+                <div class="card-buttons">
+                    <a href="PROBLEMAS.md" class="btn btn-primary">Ver soluciones</a>
+                </div>
+            </div>
+
+            <!-- Card 6: Checklist -->
+            <div class="card">
+                <div class="card-icon">✅</div>
+                <h2>Checklist Completo</h2>
+                <p>Lista de verificación para personalización y despliegue</p>
+                <div class="card-buttons">
+                    <a href="CHECKLIST.md" class="btn btn-primary">Descargar</a>
+                </div>
+            </div>
+
+            <!-- Card 7: Información -->
+            <div class="card">
+                <div class="card-icon">📚</div>
+                <h2>Documentación</h2>
+                <p>Información del proyecto y referencias técnicas</p>
+                <div class="card-buttons">
+                    <a href="README.md" class="btn btn-primary">README</a>
+                </div>
+            </div>
+
+            <!-- Card 8: Configuración -->
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <h2>Configuración</h2>
+                <p>Archivo de configuración personalizable (config.js)</p>
+                <div class="card-buttons">
+                    <a href="config.js" class="btn btn-secondary" download>Descargar</a>
+                </div>
+            </div>
+
+            <!-- Card 9: Recursos -->
+            <div class="card">
+                <div class="card-icon">🔗</div>
+                <h2>Recursos Externos</h2>
+                <p>Links a librerías, generadores y documentación oficial</p>
+                <div class="card-buttons">
+                    <a href="https://aframe.io/docs/" target="_blank" class="btn btn-secondary">A-Frame</a>
+                    <a href="https://ar-js-org.github.io/AR.js-Docs/" target="_blank" class="btn btn-secondary">AR.js</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Section -->
+        <div class="status-section">
+            <h2>📋 Checklist Rápido</h2>
+            
+            <div class="status-item pending">
+                <div class="status-icon">1️⃣</div>
+                <div class="status-content">
+                    <h3>Personaliza tu información</h3>
+                    <p>Nombre, profesión, redes sociales, avatar y video</p>
+                </div>
+            </div>
+
+            <div class="status-item pending">
+                <div class="status-icon">2️⃣</div>
+                <div class="status-content">
+                    <h3>Prueba localmente</h3>
+                    <p>Abre index.html en tu navegador para verificar que funciona</p>
+                </div>
+            </div>
+
+            <div class="status-item pending">
+                <div class="status-icon">3️⃣</div>
+                <div class="status-content">
+                    <h3>Elige una plataforma de hosting</h3>
+                    <p>Glitch (fácil), GitHub Pages (recomendado) o Netlify (profesional)</p>
+                </div>
+            </div>
+
+            <div class="status-item pending">
+                <div class="status-icon">4️⃣</div>
+                <div class="status-content">
+                    <h3>Despliega a HTTPS</h3>
+                    <p>Sigue las instrucciones en DESPLIEGUE.md</p>
+                </div>
+            </div>
+
+            <div class="status-item pending">
+                <div class="status-icon">5️⃣</div>
+                <div class="status-content">
+                    <h3>Prueba en tu celular</h3>
+                    <p>Con el marcador Hiro, verifica que todo funciona perfectamente</p>
+                </div>
+            </div>
+
+            <div class="status-item pending">
+                <div class="status-icon">6️⃣</div>
+                <div class="status-content">
+                    <h3>Comparte tu tarjeta AR</h3>
+                    <p>Envía el enlace HTTPS a tus contactos, LinkedIn, portfolios, etc.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links Banner -->
+        <div class="banner" style="margin-top: 40px;">
+            <h3>🎯 Archivos principales</h3>
+            <div class="banner-code">
+                📄 index.html → Tu tarjeta AR interactiva<br>
+                📄 marcador.html → Descargar marcador Hiro<br>
+                📄 config.js → Configuración personalizable<br>
+                📖 *.md → Documentación y guías
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🎉 Tarjeta de Presentación Infinita - Realizado con AR.js y A-Frame</p>
+            <p style="font-size: 12px; margin-top: 10px; opacity: 0.7;">Proyecto educativo • Libre para usar y compartir • 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animación suave al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+            });
+        });
+
+        // Función para copiar al portapapeles
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            alert('¡Copiado al portapapeles!');
+        }
+    </script>
+
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body>
+</html>
